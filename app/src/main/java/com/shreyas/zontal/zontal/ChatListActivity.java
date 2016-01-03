@@ -4,14 +4,55 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ListView;
+
+import com.parse.FindCallback;
+import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
+import com.parse.ParseUser;
+import com.shreyas.zontal.zontal.utils.ChatListAdaper;
+
+import java.util.List;
 
 
 public class ChatListActivity extends ActionBarActivity {
+
+
+    private ListView listView;
+    private ChatListAdaper chatListAdaper;
+    private ParseUser currentUser;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat_list);
+
+        listView = (ListView)findViewById(R.id.chat_headers_list);
+
+        currentUser = ParseUser.getCurrentUser();
+
+        String userID = currentUser.getObjectId();
+
+        ParseQuery<ParseObject> parseQuery  = ParseQuery.getQuery("Chat");
+        parseQuery.whereContains("chatID",userID);
+
+        parseQuery.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> objects, ParseException e) {
+
+
+                chatListAdaper = new ChatListAdaper(ChatListActivity.this,objects);
+
+                listView.setAdapter(chatListAdaper);
+
+            }
+        });
+
+
+
+
     }
 
     @Override
