@@ -78,15 +78,28 @@ public class ProfileActivity extends ActionBarActivity {
 
 
                 Bitmap bmp = (Bitmap)data.getExtras().get("data");
+                byte[] byteArray;
 
+                try {
 
-                int size = bmp.getRowBytes() * bmp.getHeight();
+                    int size = bmp.getRowBytes() * bmp.getHeight();
 
-                ByteBuffer byteBuffer = ByteBuffer.allocate(size);
+                    ByteBuffer byteBuffer = ByteBuffer.allocate(size);
 
-                bmp.copyPixelsToBuffer(byteBuffer);
+                    bmp.copyPixelsToBuffer(byteBuffer);
 
-                byte[] byteArray = byteBuffer.array();
+                    byteArray = byteBuffer.array();
+
+                }
+
+                catch (NullPointerException e){
+
+                    ByteArrayOutputStream bos = new ByteArrayOutputStream();
+
+                    bmp.compress(Bitmap.CompressFormat.PNG,100,bos);
+                    byteArray = bos.toByteArray();
+
+                }
 
                 final ParseFile file = new ParseFile(byteArray);
 
