@@ -43,10 +43,15 @@ public class MainActivity extends ActionBarActivity {
                     public void done(ParseUser user, ParseException e) {
 
                         if(e == null){
-                            //TODO: Transition to chat list
+
+                            Intent i = new Intent(MainActivity.this,ChatListActivity.class);
+                            startActivity(i);
+
                         }
                         else{
+
                             Zontal.showToast(e.getMessage());
+
                         }
 
                     }

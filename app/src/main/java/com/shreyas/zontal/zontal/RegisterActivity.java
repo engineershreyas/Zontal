@@ -1,5 +1,6 @@
 package com.shreyas.zontal.zontal;
 
+import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -64,10 +65,15 @@ public class RegisterActivity extends ActionBarActivity {
                     @Override
                     public void done(ParseException e) {
                         if(e == null){
-                            //TODO: transition to onboarding
+
+                            Intent i = new Intent(RegisterActivity.this,ProfileActivity.class);
+                            startActivity(i);
+
                         }
                         else{
+
                             Zontal.showToast(e.getMessage());
+
                         }
                     }
                 });
