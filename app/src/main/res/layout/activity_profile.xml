@@ -25,7 +25,20 @@
         android:layout_marginTop="20dp"
         android:text="Username"
         android:textSize="22sp"
+        android:textColor="#ffffff"
 
+        />
+
+
+    <Button
+        android:id="@+id/profile_done_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Done"
+        android:background="#006064"
+        android:textColor="#ffffff"
+        android:layout_marginTop="80dp"
+        android:layout_gravity="center_horizontal"
         />
 
 

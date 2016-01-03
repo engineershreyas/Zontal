@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.github.siyamed.shapeimageview.CircularImageView;
@@ -31,6 +32,7 @@ public class ProfileActivity extends ActionBarActivity {
 
     private CircularImageView imageView;
     private TextView username;
+    private Button done;
 
     private ParseUser currentUser;
 
@@ -141,6 +143,18 @@ public class ProfileActivity extends ActionBarActivity {
                 Zontal.showToast("Error taking picture!");
             }
         }
+
+        done.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent i = new Intent(ProfileActivity.this,ChatListActivity.class);
+                startActivity(i);
+
+            }
+        });
+
+
     }
 
     @Override
