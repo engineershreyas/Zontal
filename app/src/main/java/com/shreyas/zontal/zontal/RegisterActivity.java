@@ -4,15 +4,85 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.parse.ParseException;
+import com.parse.ParseUser;
+import com.parse.SignUpCallback;
 
 
 public class RegisterActivity extends ActionBarActivity {
+
+    private EditText username, password, confirmPassword, email, phoneNumber;
+    private Button finish;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
+
+        username = (EditText)findViewById(R.id.register_username);
+        password = (EditText)findViewById(R.id.register_password);
+        confirmPassword = (EditText)findViewById(R.id.register_confirm_password);
+        email = (EditText)findViewById(R.id.register_email);
+        phoneNumber = (EditText)findViewById(R.id.register_number);
+
+        finish = (Button)findViewById(R.id.register_done_btn);
+
+
+        finish.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                String usernameText = username.getText().toString();
+                String passwordText = password.getText().toString();
+                String confirmPasswordText = confirmPassword.getText().toString();
+                String emailText = email.getText().toString();
+                String phoneText = phoneNumber.getText().toString();
+
+
+                if (!passwordText.equals(confirmPasswordText)) {
+
+                    Zontal.showToast("Oops, the two passwords don't match!");
+
+                }
+
+                ParseUser newUser = new ParseUser();
+
+                newUser.setUsername(usernameText);
+                newUser.setPassword(passwordText);
+                newUser.setEmail(emailText);
+                newUser.put("phone", phoneText);
+
+
+                newUser.signUpInBackground(new SignUpCallback() {
+                    @Override
+                    public void done(ParseException e) {
+                        if(e == null){
+                            //TODO: transition to onboarding
+                        }
+                        else{
+                            Zontal.showToast(e.getMessage());
+                        }
+                    }
+                });
+
+
+
+            }
+        });
+
+
+
+
     }
+
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

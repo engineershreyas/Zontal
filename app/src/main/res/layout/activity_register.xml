@@ -9,7 +9,7 @@
     tools:context="com.shreyas.zontal.zontal.RegisterActivity">
 
     <EditText
-        android:id="@+id/register_login"
+        android:id="@+id/register_username"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
