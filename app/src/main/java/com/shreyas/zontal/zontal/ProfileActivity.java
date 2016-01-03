@@ -46,6 +46,8 @@ public class ProfileActivity extends ActionBarActivity {
 
         username = (TextView)findViewById(R.id.profile_username);
 
+        done  = (Button)findViewById(R.id.profile_done_btn);
+
         currentUser = ParseUser.getCurrentUser();
 
         username.setText(currentUser.getUsername());
@@ -64,6 +66,16 @@ public class ProfileActivity extends ActionBarActivity {
 
                 startActivityForResult(intent,CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
 
+
+            }
+        });
+
+        done.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent i = new Intent(ProfileActivity.this,ChatListActivity.class);
+                startActivity(i);
 
             }
         });
@@ -157,15 +169,7 @@ public class ProfileActivity extends ActionBarActivity {
             }
         }
 
-        done.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
 
-                Intent i = new Intent(ProfileActivity.this,ChatListActivity.class);
-                startActivity(i);
-
-            }
-        });
 
 
     }
