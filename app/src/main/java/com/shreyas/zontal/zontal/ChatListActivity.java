@@ -4,8 +4,11 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ListView;
 
+import com.gc.materialdesign.views.ButtonFlat;
+import com.gc.materialdesign.views.ButtonFloat;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
@@ -22,6 +25,7 @@ public class ChatListActivity extends ActionBarActivity {
     private ListView listView;
     private ChatListAdaper chatListAdaper;
     private ParseUser currentUser;
+    private ButtonFloat floatBtn;
 
 
     @Override
@@ -30,6 +34,7 @@ public class ChatListActivity extends ActionBarActivity {
         setContentView(R.layout.activity_chat_list);
 
         listView = (ListView)findViewById(R.id.chat_headers_list);
+        floatBtn = (ButtonFloat)findViewById(R.id.buttonFloat);
 
         currentUser = ParseUser.getCurrentUser();
 
@@ -50,6 +55,15 @@ public class ChatListActivity extends ActionBarActivity {
             }
         });
 
+        floatBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+
+
+
+            }
+        });
 
 
 

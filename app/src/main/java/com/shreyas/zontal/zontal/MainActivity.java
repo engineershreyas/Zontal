@@ -3,22 +3,26 @@ package com.shreyas.zontal.zontal;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.parse.LogInCallback;
+import com.parse.LogOutCallback;
 import com.parse.ParseException;
 import com.parse.ParseUser;
 
 
 public class MainActivity extends ActionBarActivity {
 
+    private final String LOG_TAG = "MainActivity";
 
     private EditText username,password;
-    private Button login, goToRegister;
+    private Button login, goToRegister, logout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +34,7 @@ public class MainActivity extends ActionBarActivity {
 
         login = (Button)findViewById(R.id.login_btn);
         goToRegister = (Button)findViewById(R.id.go_to_register_btn);
+        logout = (Button)findViewById(R.id.logout_btn);
 
         login.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -68,6 +73,23 @@ public class MainActivity extends ActionBarActivity {
 
                 startActivity(i);
 
+            }
+        });
+
+        logout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ParseUser.logOutInBackground(new LogOutCallback() {
+                    @Override
+                    public void done(ParseException e) {
+                        if(e == null){
+                            Toast.makeText(MainActivity.this,"Logged out!",Toast.LENGTH_SHORT).show();
+                        }
+                        else{
+                            Log.e(LOG_TAG,"Error logging out: " + e.getMessage());
+                        }
+                    }
+                });
             }
         });
 

@@ -2,11 +2,15 @@ package com.shreyas.zontal.zontal;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.Matrix;
+import android.media.ExifInterface;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,6 +26,7 @@ import com.parse.SaveCallback;
 import com.squareup.picasso.Picasso;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.nio.ByteBuffer;
 
 
@@ -29,6 +34,7 @@ public class ProfileActivity extends ActionBarActivity {
 
 
     private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 100;
+    private final String LOG_TAG = "ProfileActivity";
 
     private CircularImageView imageView;
     private TextView username;
@@ -90,28 +96,30 @@ public class ProfileActivity extends ActionBarActivity {
 
 
                 Bitmap bmp = (Bitmap)data.getExtras().get("data");
+
+                Uri imageUri = data.getData();
+                String[] orientationColumn = {MediaStore.Images.Media.ORIENTATION};
+                Cursor cur = managedQuery(imageUri, orientationColumn, null, null, null);
+                int orientation = -1;
+                if (cur != null && cur.moveToFirst()) {
+                    orientation = cur.getInt(cur.getColumnIndex(orientationColumn[0]));
+                }
+                Matrix matrix = new Matrix();
+                matrix.postRotate(orientation);
+
+
+                bmp = Bitmap.createBitmap(bmp,0,0,bmp.getWidth(),bmp.getHeight(),matrix,true);
+
+
+
                 byte[] byteArray;
 
-                try {
+                ByteArrayOutputStream bos = new ByteArrayOutputStream();
 
-                    int size = bmp.getRowBytes() * bmp.getHeight();
+                bmp.compress(Bitmap.CompressFormat.PNG,100,bos);
+                byteArray = bos.toByteArray();
 
-                    ByteBuffer byteBuffer = ByteBuffer.allocate(size);
 
-                    bmp.copyPixelsToBuffer(byteBuffer);
-
-                    byteArray = byteBuffer.array();
-
-                }
-
-                catch (NullPointerException e){
-
-                    ByteArrayOutputStream bos = new ByteArrayOutputStream();
-
-                    bmp.compress(Bitmap.CompressFormat.PNG,100,bos);
-                    byteArray = bos.toByteArray();
-
-                }
 
                 final ParseFile file = new ParseFile(byteArray);
 
@@ -128,6 +136,8 @@ public class ProfileActivity extends ActionBarActivity {
 
                                               if(e == null){
 
+                                                  Log.d(LOG_TAG,"file saved!");
+
                                                   currentUser.put("image",file);
 
                                                   currentUser.saveInBackground(new SaveCallback() {
@@ -135,9 +145,13 @@ public class ProfileActivity extends ActionBarActivity {
                                                       public void done(ParseException e) {
                                                           if(e == null){
 
+                                                              Log.d(LOG_TAG,"user saved");
+
                                                               Picasso.with(ProfileActivity.this).load(file.getUrl()).into(imageView);
 
                                                           }else{
+
+                                                              Log.e(LOG_TAG,"user save fail: " + e.getLocalizedMessage());
 
                                                               Zontal.showToast(e.getMessage());
                                                           }
@@ -146,6 +160,9 @@ public class ProfileActivity extends ActionBarActivity {
 
                                               }
                                               else{
+
+                                                  Log.e(LOG_TAG,"file save fail: " + e.getMessage());
+
                                                   Zontal.showToast(e.getMessage());
                                               }
 
@@ -165,6 +182,8 @@ public class ProfileActivity extends ActionBarActivity {
 
             }
             else{
+
+
                 Zontal.showToast("Error taking picture!");
             }
         }

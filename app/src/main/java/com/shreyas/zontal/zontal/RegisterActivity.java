@@ -3,6 +3,7 @@ package com.shreyas.zontal.zontal;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,6 +18,8 @@ import com.parse.SignUpCallback;
 
 
 public class RegisterActivity extends ActionBarActivity {
+
+    private final String LOG_TAG = "RegisterActivity";
 
     private EditText username, password, confirmPassword, email, phoneNumber;
     private Button finish;
@@ -39,6 +42,8 @@ public class RegisterActivity extends ActionBarActivity {
         finish.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                Log.d(LOG_TAG,"finish btn clicked");
 
                 String usernameText = username.getText().toString();
                 String passwordText = password.getText().toString();
@@ -64,13 +69,20 @@ public class RegisterActivity extends ActionBarActivity {
                 newUser.signUpInBackground(new SignUpCallback() {
                     @Override
                     public void done(ParseException e) {
+
+                        Log.d(LOG_TAG,"signing up user");
+
                         if(e == null){
+
+                            Log.d(LOG_TAG,"sign up success");
 
                             Intent i = new Intent(RegisterActivity.this,ProfileActivity.class);
                             startActivity(i);
 
                         }
                         else{
+
+                            Log.e(LOG_TAG,"sign up fail : " + e.getMessage());
 
                             Zontal.showToast(e.getMessage());
 

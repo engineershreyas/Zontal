@@ -1,6 +1,7 @@
 package com.shreyas.zontal.zontal.utils;
 
 import com.parse.ParseObject;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 /**
@@ -29,6 +30,19 @@ public class ChatFactory {
         return chat;
 
 
+
+    }
+
+    public static ParseQuery<ParseObject> findChat(ParseUser userA, ParseUser userB){
+
+
+        ParseQuery<ParseObject> chatQuery = ParseQuery.getQuery("Chat");
+
+        String chatID = generateChatID(userA,userB);
+
+        chatQuery.whereEqualTo("chatID",chatID);
+
+        return chatQuery;
 
     }
 
